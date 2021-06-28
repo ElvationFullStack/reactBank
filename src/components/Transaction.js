@@ -1,22 +1,26 @@
 import React, { Component } from 'react'
+import Button from 'react-bootstrap/Button'
 
 export class Transaction extends Component {
     handleRemove = () => {
         console.log("here")
-        console.log(" removing ",this.props.transaction.vendor)
+        console.log(" removing ", this.props.transaction.vendor)
         this.props.removeTransaction(this.props.transaction.vendor)
 
     }
     render() {
         console.log(this.props.transaction)
+        {
+            // <button onClick={this.handleRemove}> remove</button>
+        }
         return (
-            <div>
-                <span> amount:  {this.props.transaction.amount}</span>
-                <span> Vendor :  {this.props.transaction.vendor}</span>
-                <span> catagory :  {this.props.transaction.category} </span>
-                <button onClick={this.handleRemove}> remove</button>
-                <br></br>
-            </div>
+            <tr>
+                <td>{this.props.transaction.amount}</td>
+                <td>{this.props.transaction.vendor}</td>
+                <td>{this.props.transaction.category}</td>
+                <td> <Button onClick={this.handleRemove}>remove</Button></td>
+
+            </tr>
         )
     }
 }

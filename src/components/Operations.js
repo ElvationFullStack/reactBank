@@ -20,7 +20,6 @@ export class Operations extends Component {
 
 
     handleSubmit = (e) => {
-        console.log(e)
         let sign = 1;
         if (e.target.name === 'withdraw') {
             sign *= -1

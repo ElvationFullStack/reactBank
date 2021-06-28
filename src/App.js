@@ -1,21 +1,26 @@
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Row, Col } from 'react-bootstrap';
+import Badge from 'react-bootstrap/Badge'
 import axios from 'axios';
-
 import React, { Component } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import Transactions from './components/Transactions';
 import Operations from './components/Operations';
+import GroupTransaction from './components/GroupTransaction';
 
 export class App extends Component {
   constructor() {
     super()
     this.state = {
       data: [
-        { amount: 3200, vendor: "Elevation", category: "Salary" },
-        { amount: -7, vendor: "Runescape", category: "Entertainment" },
-        { amount: -20, vendor: "Subway", category: "Food" },
-        { amount: -98, vendor: "La Baguetterie", category: "Food" }
       ],
       balance: 4000
       , res: []
@@ -24,13 +29,13 @@ export class App extends Component {
   async getTransaction() {
     return axios.get("http://localhost:3005/transactions")
   }
-  // async addTransactionToDb(tran) {
-  //   axios.post("http://localhost:3005/transactions",tran)
-
-  // }
-  async componentDidMount() {
+  async getDataFromDb() {
     const response = await this.getTransaction()
     this.setState({ data: response.data })
+  }
+
+  async componentDidMount() {
+    this.getDataFromDb()
   }
   getTotalBalance = () => {
     let balance = 0;
@@ -39,12 +44,11 @@ export class App extends Component {
   }
 
   addTransaction = async (tran) => {
-    // const tempData = [...this.state.data]
-    // tempData.push(tran)
-    // this.setState({ data: tempData })
     let postResponse = await axios.post("http://localhost:3005/transactions", tran)
     console.log(postResponse.status)
     if (postResponse.status === 201) {
+      this.getDataFromDb()
+
 
     }
 
@@ -53,23 +57,86 @@ export class App extends Component {
 
   }
   removeTransaction = async (vendor) => {
-    // const tempData = [...this.state.data]
-    // const tempDataFiltter = tempData.filter(t => t.vendor !== vendor)
-    // this.setState({ data: tempDataFiltter })
     const tempData = [...this.state.data]
     const deletTrans = tempData.find(t => t.vendor === vendor)
-    await axios.delete("http://localhost:3005/transactions", {data:deletTrans})
-
+    await axios.delete("http://localhost:3005/transactions", { data: deletTrans })
+    this.getDataFromDb()
 
   }
 
+  amountByGroup = () => {
+    const amountGroupSet = {}
+    this.state.data.forEach(t => {
+      amountGroupSet[t.category] = + amountGroupSet[t.category] === undefined ? 0 : t.amount
+    })
+
+    return amountGroupSet
+
+  }
   render() {
     return (
       <div className="App">
-        <h1>your balance {this.getTotalBalance()}</h1>
-        <Transactions data={this.state.data} removeTransaction={this.removeTransaction}></Transactions>
+        <h2>
+          Your Balance:
+          <Badge id="balance-header">  {this.getTotalBalance()}</Badge>
+        </h2>
 
-        <Operations addTransaction={this.addTransaction}></Operations>
+        <Router>
+
+          <Container fluid="md">
+            <Row className="justify-content-md-center">
+              <Col>
+
+                <Link to="/transaction">
+               
+                    transaction
+                
+                </Link>
+
+              </Col>
+              <Col>
+                <Link to="/operation">  operation </Link>
+              </Col>
+            
+              <Col>
+                <Link to="/group"> group </Link>
+              </Col>
+            
+
+            </Row>
+          </Container>
+
+
+
+
+          <Route path='/transaction' exact render={() =>
+            <Transactions
+              data={this.state.data}
+              removeTransaction={this.removeTransaction}>
+            </Transactions>}>
+          </Route>
+
+          <Route path='/operation' exact render={() =>
+            <Operations
+              addTransaction={this.addTransaction}>
+            </Operations>
+          }>
+            {//this.amountByGroup()
+              // 
+            }
+          </Route>
+
+          <Route path="/group" exact render={() =>
+
+            <GroupTransaction group={this.amountByGroup()}></GroupTransaction>
+          }
+
+          >
+
+          </Route>
+        </Router>
+
+
       </div>
     );
   }
