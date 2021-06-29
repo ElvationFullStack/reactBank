@@ -11,6 +11,12 @@
   margin: 3px;
   border-radius: 5px;
 }
+.green{
+  color: green;
+}
+.red{
+  color: red;
+}
 
 /* 
 .App-header {

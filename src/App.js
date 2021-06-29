@@ -73,12 +73,15 @@ export class App extends Component {
     return amountGroupSet
 
   }
+  balanceClassName=()=>{
+   
+  }
   render() {
     return (
       <div className="App">
         <h2>
           Your Balance:
-          <Badge id="balance-header">  {this.getTotalBalance()}</Badge>
+          {this.getTotalBalance()>500? <span className="green">{this.getTotalBalance()}</span>: <span className="red">{this.getTotalBalance()}</span>}
         </h2>
 
         <Router>
