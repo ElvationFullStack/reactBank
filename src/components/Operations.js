@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
-
+import InputGroup from 'react-bootstrap/InputGroup'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 export class Operations extends Component {
     constructor() {
         super()
@@ -36,12 +38,28 @@ export class Operations extends Component {
     render() {
         return (
             <div>
-                <input onChange={this.handleTextChange} name="amount" amount={this.state.amount} placeholder="amount "></input>
-                <input onChange={this.handleTextChange} name="vendor" placeholder="vendor"></input>
-                <input onChange={this.handleTextChange} name="category" placeholder="category"></input>
+            <InputGroup size="sm" className="mb-3">
+            <InputGroup.Text id="inputGroup-sizing-sm">amount</InputGroup.Text>
+            <Form.Control aria-label="Small" aria-describedby="inputGroup-sizing-sm"  name="amount" onChange={this.handleTextChange} />
+          </InputGroup>
+          <InputGroup size="sm" className="mb-3">
+          <InputGroup.Text id="inputGroup-sizing-sm">vendor</InputGroup.Text>
+          <Form.Control aria-label="Small" aria-describedby="inputGroup-sizing-sm"   onChange={this.handleTextChange} name="vendor" />
+        </InputGroup>
+        <InputGroup size="sm" className="mb-3">
+        <InputGroup.Text id="inputGroup-sizing-sm">category</InputGroup.Text>
+        <Form.Control aria-label="Small" aria-describedby="inputGroup-sizing-sm"   onChange={this.handleTextChange} name="category" />
+      </InputGroup>
+      <div className="d-grid gap-2">
+      <Button name="deposite" onClick={this.handleSubmit} variant="primary" size="sm">
+      Deposite
+      </Button>
+      <Button  name="withdraw" onClick={this.handleSubmit} variant="secondary" size="sm">
+      Withdrow
+      </Button>
+    </div>
 
-                <button name="deposite" onClick={this.handleSubmit}>Deposite</button>
-                <button name="withdraw" onClick={this.handleSubmit}>Withdrow</button>
+               
 
             </div>
         )

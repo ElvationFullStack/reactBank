@@ -10,7 +10,6 @@ export class GroupTransaction extends Component {
         })
     }
     render() {
-        console.log(this.props.group)
 
         return (
             <div>
